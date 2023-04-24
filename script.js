@@ -3,7 +3,6 @@ let c = document.getElementById("canvas1");
 let draw = c.getContext("2d");
 let deltaTime = 42;
 let planc = deltaTime/400;
-let birbheight = 5;
 let maxvel = 6;
 let maxvvel = 4;
 let j = 0;
@@ -22,18 +21,17 @@ function drawstuff(positionx,positiony,lenghtx,lengthy,angle,centeroffset,colour
     draw.fill();
 }
 //startang endang for the elipses last two parameters
-function drawhalfstuff(positionx,positiony,lenghtx,lengthy,angle,centeroffset,colour){ 
+function drawhalfstuff(positionx,positiony,lenghtx,lengthy,angle,startang,endang,centeroffset,colour){ 
     let yoff = Math.cos(angle)*centeroffset;
     let xoff = Math.sin(angle)*centeroffset;
 
     draw.beginPath();
-    draw.ellipse(positionx+xoff,positiony+yoff,lenghtx,lengthy,-angle,0,Math.PI*2);
+    draw.ellipse(positionx+xoff,positiony+yoff,lenghtx,lengthy,-angle,startang,endang);
     draw.stroke();
     draw.closePath();
     draw.fillStyle = colour;
     draw.fill();
 }
-
 
 class batfly{
     constructor(){
@@ -42,7 +40,10 @@ class batfly{
         this.accel = [0,0];
         this.hov = false;
         this.col = 0;
+        this.birbheight = 5+(Math.random()-0.5)*2;
         this.rotation = 0;
+        this.wingcoll = "rgb(0,0,0)";
+        this.wingcolr = "rgb(0,0,0)";
     }
 
     initiatehover(){
@@ -66,6 +67,7 @@ class batfly{
 
     update(){
 
+        this.accel = [Math.random()-0.5,Math.random()-0.5];
 
         //velocity according to accel and planc
         this.vel[0] += this.accel[0]*planc*10;
@@ -106,12 +108,12 @@ class batfly{
 
 
     render(){
-        let yoff = Math.cos(this.rotation)*birbheight*3/4;
-        let xoff = Math.sin(this.rotation)*birbheight*3/4;
+        let yoff = Math.cos(this.rotation)*this.birbheight*3/4;
+        let xoff = Math.sin(this.rotation)*this.birbheight*3/4;
 
         //body
         draw.beginPath();
-        draw.ellipse(this.pos[0]+xoff,this.pos[1]+yoff,3,birbheight,-this.rotation,0,2*Math.PI);
+        draw.ellipse(this.pos[0]+xoff,this.pos[1]+yoff,3,this.birbheight,-this.rotation,0,2*Math.PI);
         draw.stroke();
         draw.closePath();
         draw.fillStyle = "rgb("+this.col+","+this.col+","+this.col+")";
@@ -119,9 +121,11 @@ class batfly{
 
         //wings
         //right
-        drawhalfstuff(this.pos[0],this.pos[1],3,birbheight*2,Math.PI/2,birbheight,"rgb(255,0,0)");
+        drawhalfstuff(this.pos[0],this.pos[1],5,this.birbheight*2,Math.PI*3/4,-Math.PI/2,Math.PI/2,this.birbheight*2,this.wingcolr);
         //left
-        drawhalfstuff(this.pos[0],this.pos[1],3,birbheight*2,-Math.PI/2,birbheight,"rgb(0,0,255)");
+        drawhalfstuff(this.pos[0],this.pos[1],5,this.birbheight*2,-Math.PI*3/4,Math.PI/2,-Math.PI/2,this.birbheight*2,this.wingcoll);
+        
+
         //debug center circle
         /*draw.beginPath();
         draw.arc(this.pos[0], this.pos[1],2,0,2*Math.PI);
@@ -144,7 +148,7 @@ class surface{
 
 
 let bats = [];
-for(let i = 0; i < 100; i++){
+for(let i = 0; i < 5; i++){
     bats[i] = new batfly();
     bats[i].col = Math.random()*100;
 }
