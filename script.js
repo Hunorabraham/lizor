@@ -7,10 +7,11 @@ let planc = deltaTime/1000;
 
 class batfly{
     constructor(){
-        this.vel = [float(0),float(0)];
-        this.pos = [float(300),float(300)];
-        this.accel = [float(0),float(0)];
+        this.vel = [0,0];
+        this.pos = [300,300];
+        this.accel = [0,0];
         this.hov = false;
+        this.col = 0;
     }
 
     initiatehover(){
@@ -20,14 +21,19 @@ class batfly{
     }
 
     update(){
-        this.vel[0] += this.accel[0]*planc;
-        this.vel[1] += this.accel[1]*planc;
-        this.pos[0] += this.vel[0]*planc;
-        this.pos[1] += this.vel[1]*planc;
-        this.accel = (Math.random,Math.random);
+        this.vel[0] += this.accel[0]*planc*10;
+        this.vel[1] += this.accel[1]*planc*10;
+        this.pos[0] += this.vel[0]*planc*10;
+        this.pos[1] += this.vel[1]*planc*10;
+        this.accel = [Math.random()-0.5,Math.random()-0.5];
     }
     render(){
-        draw.arc(this.pos[0],this.pos[1],20,0,2*Math.PI);
+        draw.beginPath();
+        draw.ellipse(this.pos[0],this.pos[1],3,5,Math.PI/4,0,2*Math.PI);
+        draw.stroke();
+        draw.closePath();
+        draw.fillStyle = "rgb("+this.col+","+this.col+","+this.col+")";
+        draw.fill();
     }
 }
 
@@ -43,25 +49,22 @@ class surface{
 
 
 let bats = [];
-for(let i = 0; i < 10; i++){
+for(let i = 0; i < 100; i++){
     bats[i] = new batfly();
+    bats[i].col = Math.random()*100;
 }
 
 
 function start(){
-    console.log("aaaa")
     setInterval(() => {
         update();
     }, deltaTime);
 }
 
 function update(){
-    draw.clearRect(0,0,c.width,c.width);
-    console.log("iiii");
-
-    draw.beginPath();
+    draw.strokeStyle = "rgba(0,0,0,0)";
+    draw.clearRect(0,0,c.width,c.height)
     for(let i =0;i<bats.length;i++){
-        console.log(bats[i].pos);
         bats[i].update();
         bats[i].render();
 
