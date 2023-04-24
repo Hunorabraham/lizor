@@ -1,12 +1,14 @@
-let g = 2;
+let g = 6;
 let c = document.getElementById("canvas1");
 let draw = c.getContext("2d");
-let deltaTime = 42;
-let planc = deltaTime/400;
+let deltaTime = 50;
+let speedup = 0.9;
+let planc = deltaTime/400*speedup;
 let maxvel = 6;
 let maxvvel = 4;
 let j = 0;
-let wingstr = 4;
+let wingstr = 3;
+let treshold = 1;
 
 //posx,y obviously position, lengx,y obviously ellipse, angle is angle, centeroffset how far the centero f the ellipse is from the posx,y, colour rgb in text
 function drawstuff(positionx,positiony,lenghtx,lengthy,angle,centeroffset,colour){ 
@@ -40,35 +42,78 @@ class batfly{
         this.accel = [0,0];
         this.hov = false;
         this.col = 0;
-        this.birbheight = 5+(Math.random()-0.5)*2;
+        this.birbheight = 5+(Math.random()-0.5)*6;
         this.rotation = 0;
-        this.wingcoll = "rgb(0,0,0)";
-        this.wingcolr = "rgb(0,0,0)";
-    }
-
-    initiatehover(){
-        //checkpred()
-        this.hov = true;
-        let cent = this.pos[1];
+        this.flapl = false;
+        this.flapr = false;
+        this.wingrl = -Math.PI*3/4;
+        this.wingrr = Math.PI*3/4;
+        this.wingspdl = 0;
+        this.wingspdr = 0;
     }
 
     flap(rl){
         //if true, right wing flaps
         if(rl){
             this.vel[0]-=wingstr;
-            this.vel[1]-=wingstr;  
+            this.vel[1]-=wingstr*1.5;
+            this.flapr = true;
         }
-        //if fale, left wing
         else{
             this.vel[0]+=wingstr;
-            this.vel[1]-=wingstr;
+            this.vel[1]-=wingstr*1.5;
+            this.flapl = true;
         }
     }
 
     update(){
+        //random jittering
+        this.accel = [(Math.random()-0.5)/4,(Math.random()-0.5)/4];
+        
 
-        this.accel = [Math.random()-0.5,Math.random()-0.5];
+        //random flaps
+        if(Math.random()>1-treshold*planc && !this.flapr){
+            this.flap(true);
+        }
+        if(Math.random()<treshold*planc && !this.flapl){
+            this.flap(false);
+        }
 
+        //rightwing
+        if(this.flapr && this.wingrr>=Math.PI*3/4){
+            if(this.wingspdr == 1){
+                this.flapr = false;
+                this.wingspdr = 0;
+                this.wingrr = Math.PI*3/4;
+            }
+            else{
+                this.wingspdr = -1;
+            }
+        }
+        if(this.flapr && this.wingrr<=Math.PI*3/4-Math.PI/2){
+            this.wingspdr = 1;
+            this.wingrr = Math.PI*3/4-Math.PI/2+0.1;
+        }
+
+        //leftwing
+        if(this.flapl && this.wingrl<=-Math.PI*3/4){
+            if(this.wingspdl == -1){
+                this.flapl = false;
+                this.wingspdl = 0;
+                this.wingrl = -Math.PI*3/4;
+            }
+            else{
+                this.wingspdl = 1;
+            }
+        }
+        if(this.flapl && this.wingrl>=-Math.PI*3/4+Math.PI/2){
+            this.wingspdl = -1;
+            this.wingrl = -Math.PI*3/4+Math.PI/2-0.1;
+        }
+
+        this.wingrr += this.wingspdr*planc*8;
+        this.wingrl += this.wingspdl*planc*8;
+        
         //velocity according to accel and planc
         this.vel[0] += this.accel[0]*planc*10;
         this.vel[1] += this.accel[1]*planc*10;
@@ -93,16 +138,16 @@ class batfly{
 
         //wallbounce
         if(this.pos[0]<0 && this.vel[0]<0){
-            this.vel[0]*=-1.1;
+            this.vel[0]*=-1;
         }
         if(this.pos[0]>c.width && this.vel[0]>0){
-            this.vel[0]*=-1.1;
+            this.vel[0]*=-1;
         }
         if(this.pos[1]<0 && this.vel[1]<0){
-            this.vel[1]*=-1.1;
+            this.vel[1]*=-1;
         }
         if(this.pos[1]>c.height && this.vel[1]>0){
-            this.vel[1]*=-1.1;
+            this.vel[1]*=-1;
         }
     }
 
@@ -113,7 +158,7 @@ class batfly{
 
         //body
         draw.beginPath();
-        draw.ellipse(this.pos[0]+xoff,this.pos[1]+yoff,3,this.birbheight,-this.rotation,0,2*Math.PI);
+        draw.ellipse(this.pos[0]+xoff,this.pos[1]+yoff,this.birbheight*3/5,this.birbheight,-this.rotation,0,2*Math.PI);
         draw.stroke();
         draw.closePath();
         draw.fillStyle = "rgb("+this.col+","+this.col+","+this.col+")";
@@ -121,18 +166,15 @@ class batfly{
 
         //wings
         //right
-        drawhalfstuff(this.pos[0],this.pos[1],5,this.birbheight*2,Math.PI*3/4,-Math.PI/2,Math.PI/2,this.birbheight*2,this.wingcolr);
+        drawhalfstuff(this.pos[0],this.pos[1]+this.birbheight/2,this.birbheight*5/6,this.birbheight*2,this.wingrr,-Math.PI/2,Math.PI/2,this.birbheight*2,this.col);
         //left
-        drawhalfstuff(this.pos[0],this.pos[1],5,this.birbheight*2,-Math.PI*3/4,Math.PI/2,-Math.PI/2,this.birbheight*2,this.wingcoll);
+        drawhalfstuff(this.pos[0],this.pos[1]+this.birbheight/2,this.birbheight*5/6,this.birbheight*2,this.wingrl,Math.PI/2,-Math.PI/2,this.birbheight*2,this.col);
         
 
-        //debug center circle
-        /*draw.beginPath();
-        draw.arc(this.pos[0], this.pos[1],2,0,2*Math.PI);
-        draw.stroke();
-        draw.closePath();
-        draw.fillStyle = "rgb(255,255,255)";
-        draw.fill();*/
+        //right eye
+        drawstuff(this.pos[0]+this.birbheight*3/10,this.pos[1],this.birbheight*3/20,this.birbheight*3/20,0,0,"rgb(255,255,255)");
+        //left eye
+        drawstuff(this.pos[0]-this.birbheight*3/10,this.pos[1],this.birbheight*3/20,this.birbheight*3/20,0,0,"rgb(255,255,255)");
     }
 }
 
@@ -148,11 +190,12 @@ class surface{
 
 
 let bats = [];
-for(let i = 0; i < 5; i++){
+for(let i = 0; i < 1000; i++){
     bats[i] = new batfly();
-    bats[i].col = Math.random()*100;
+    bats[i].col = Math.random()*180;
 }
-
+bats[0].birbheight = 80;
+bats[0].col = 255;
 
 function start(){
     setInterval(() => {
