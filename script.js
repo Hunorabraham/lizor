@@ -13,7 +13,7 @@ class segment{
 class batfly{
     constructor(){
         this.vel = [0,0];
-        this.pos = [10,10];
+        this.pos = [300,300];
         this.accel = [0,0];
         this.hov = false;
     }
@@ -59,7 +59,9 @@ for(let i = 0; i < 10; i++){
 
 
 function start(){
-
+    setInterval(() => {
+        update();
+    }, deltaTime);
 }
 
 function update(){
