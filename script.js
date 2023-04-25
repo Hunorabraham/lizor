@@ -1,6 +1,8 @@
 let g = 6;
-let c = document.getElementById("canvas1");
+let c = document.getElementById("LayerTop");
 let draw = c.getContext("2d");
+let cb = document.getElementById("LayerBottom");
+let drawb = cb.getContext("2d");
 let deltaTime = 42;
 let speedup = 1;
 let planc = deltaTime/400*speedup;
@@ -11,6 +13,17 @@ let wingstr = 3;
 let treshold = 1;
 
 //posx,y obviously position, lengx,y obviously ellipse, angle is angle, centeroffset how far the centero f the ellipse is from the posx,y, colour rgb in text
+function drawstuffb(positionx,positiony,lenghtx,lengthy,angle,centeroffset,colour){ 
+    let yoff = Math.cos(angle)*centeroffset;
+    let xoff = Math.sin(angle)*centeroffset;
+
+    drawb.beginPath();
+    drawb.ellipse(positionx+xoff,positiony+yoff,lenghtx,lengthy,-angle,0,2*Math.PI);
+    drawb.stroke();
+    drawb.closePath();
+    drawb.fillStyle = colour;
+    drawb.fill();
+}
 function drawstuff(positionx,positiony,lenghtx,lengthy,angle,centeroffset,colour){ 
     let yoff = Math.cos(angle)*centeroffset;
     let xoff = Math.sin(angle)*centeroffset;
@@ -38,23 +51,12 @@ function drawhalfstuff(positionx,positiony,lenghtx,lengthy,angle,startang,endang
 class vineplantsegment{
     constructor(pos,angle){
         this.pos=pos;
-        this.len=10;
+        this.len=10+(Math.random()-0.5)*5;
         this.angle=angle;
     }
 
     render(){
-        let xoff=Math.sin(this.angle)*this.len;
-        let yoff=Math.cos(this.angle)*this.len;
-        if(Math.abs(this.angle)>Math.PI/2){
-            yoff*=-1;
-        }
-        draw.beginPath()
-        draw.ellipse(this.pos[0]+xoff,this.pos[1]-yoff,1.5,this.len ,-this.angle,0,Math.PI*2)
-        draw.strokeStyle = "rgba(0,0,0,0)";
-        draw.stroke();
-        draw.closePath()
-        draw.fillStyle = "green"
-        draw.fill()
+        drawstuffb(this.pos[0],this.pos[0],2,this.len,this.angle,this.len,"green");
     }
 }
 class vineplant{
