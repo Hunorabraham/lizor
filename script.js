@@ -145,18 +145,18 @@ class batfly{
         this.wingspdr = 0;
     }
 
-    flap(rl){
+    flap(rl,str){
         //if true, right wing flaps
         if(rl){
-            this.vel[0]-=wingstr+(Math.random()-0.5)*4;
-            this.vel[0]-=wingstr;
-            this.vel[1]-=wingstr*1.5;
+            this.vel[0]-=str+(Math.random()-0.5)*4;
+            this.vel[0]-=str;
+            this.vel[1]-=str*1.5;
             this.flapr = true;
         }
         else{
-            this.vel[0]+=wingstr+(Math.random()-0.5)*4;
-            this.vel[0]+=wingstr;
-            this.vel[1]-=wingstr*1.5;
+            this.vel[0]+=str+(Math.random()-0.5)*4;
+            this.vel[0]+=str;
+            this.vel[1]-=str*1.5;
             this.flapl = true;
         }
     }
@@ -168,10 +168,10 @@ class batfly{
 
         //random flaps
         if(Math.random()>1-treshold*planc && !this.flapr){
-            this.flap(true);
+            this.flap(true,wingstr);
         }
         if(Math.random()<treshold*planc && !this.flapl){
-            this.flap(false);
+            this.flap(false,wingstr);
         }
 
         //rightwing
@@ -290,7 +290,7 @@ let south = new vineplant([cb.width/3,cb.height+600],Math.PI-Math.PI/4,false);
 
 
 let bats = [];
-for(let i = 0; i < 200; i++){
+for(let i = 0; i < 600; i++){
     bats[i] = new batfly();
     bats[i].col = Math.random()*180;
 }
