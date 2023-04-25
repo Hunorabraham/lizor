@@ -41,15 +41,15 @@ class vineplantsegment{
         this.len=10;
         this.angle=angle;
     }
+    
+    
 
     render(){
         let xoff=Math.sin(this.angle)*this.len;
         let yoff=Math.cos(this.angle)*this.len;
-        if(Math.abs(this.angle)>Math.PI/2){
-            yoff*=-1;
-        }
+
         draw.beginPath()
-        draw.ellipse(this.pos[0]+xoff,this.pos[1]-yoff,1.5,this.len ,-this.angle,0,Math.PI*2)
+        draw.ellipse(this.pos[0]+xoff,this.pos[1]+yoff,1.5,this.len ,-this.angle,0,Math.PI*2)
         draw.strokeStyle = "rgba(0,0,0,0)";
         draw.stroke();
         draw.closePath()
@@ -58,8 +58,19 @@ class vineplantsegment{
     }
 }
 class vineplant{
-    constructor(){
+    constructor(pos,angle){
         this.segments=[];
+        this.segments[0]=new vineplantsegment(pos,angle)
+    }
+    addLeaf(){
+        let startsegment = this.segments[Math.round(Math.random()*(this.segments.length-1))];
+        for(let i = 1; i < Math.round(Math.random()*35); i++){
+            this.segments[this.segments.length]= new vineplantsegment(
+                [startsegment.pos[0] +6/4*(Math.sin(startsegment.angle)*startsegment.len),
+                startsegment.pos[1]+6/4*(Math.cos(startsegment.angle)*startsegment.len)],
+                startsegment.angle+0.5*(Math.random()-0.5));
+            startsegment = this.segments[this.segments.length-1];
+        }
     }
 
     render(){
@@ -224,14 +235,9 @@ class surface{
     }
 }
 
-let vine = new vineplant
-vine.segments[0]=new vineplantsegment([300,300],Math.random()*Math.PI*2)
-for(let i = 1; i < 40; i++){
-    vine.segments[i]= new vineplantsegment(
-        [vine.segments[i-1].pos[0] +6/4*(Math.sin(vine.segments[i-1].angle)*vine.segments[i-1].len),
-        vine.segments[i-1].pos[1]+6/4*(Math.cos(vine.segments[i-1].angle)*vine.segments[i-1].len)],
-        vine.segments[i-1].angle+0.5*(Math.random()-0.5));
-    console.log(i,vine.segments[i].pos);
+let vine = new vineplant([c.width/2,c.height/2],Math.random()*Math.PI*2)
+for(let i = 0;i<200;i++){
+    vine.addLeaf();
 }
 vine.render()
 
