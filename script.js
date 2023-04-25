@@ -41,10 +41,28 @@ class vineplantsegment{
         this.len=Math.random()*2;
         this.angle=angle+Math.random()-0.5;
     }
+
+    render(){
+        let xoff=Math.cos(this.angle)*this.len/2;
+        let yoff=Math.sin(this.angle)*this.len/2;
+
+        draw.beginPath()
+        draw.ellipse(this.pos[0]+xoff,this.pos[1]+yoff,3,this.len,this.angle,0,Math.PI*2)
+        draw.stroke()
+        draw.closePath()
+        draw.fillStyle = "green"
+        draw.fill()
+    }
 }
 class vineplant{
     constructor(){
         this.segments=[];
+    }
+
+    render(){
+        this.segments.forEach(segment => {
+            segment.render();
+        });
     }
 }
 
@@ -203,12 +221,21 @@ class surface{
     }
 }
 
+let vine = new vineplant
+vine.segments[0]=new vineplantsegment([300,300],0)
+for(let i = 1; i < 30; i++){
+    vine.segments[i]= new vineplantsegment(vine.segments[i-1].pos[0]+[(Math.cos(vine.segments[i-1].angle)*vine.segments[i-1].len),vine.segments[i-1].pos[1]+(Math.sin(vine.segments[i-1].angle)*vine.segments[i-1].len)],vine.segments[i-1].angle+0.5*(Math.random()-0.5))
+    console.log(i,vine.segments[i].pos)
+}
+vine.render()
+
 
 let bats = [];
-for(let i = 0; i < 200; i++){
+/*for(let i = 0; i < 200; i++){
     bats[i] = new batfly();
     bats[i].col = Math.random()*180;
-}
+}*/
+
 
 function start(){
     setInterval(() => {
