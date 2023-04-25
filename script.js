@@ -247,10 +247,10 @@ vine.render()
 
 
 let bats = [];
-/*for(let i = 0; i < 200; i++){
+for(let i = 0; i < 200; i++){
     bats[i] = new batfly();
     bats[i].col = Math.random()*180;
-}*/
+}
 
 
 function start(){

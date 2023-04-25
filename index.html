@@ -8,20 +8,21 @@
     <style>
         #button1{
             margin: auto;
+            position: absolute;
+            left: auto;
+            top: 1000px;
         }
         .canvas{
             border: solid black 1px;
             position: absolute;
-            left: 0;
-            top: 0;
-            height: 900px;
-            width: 1200px;
+            left: auto;
+            top: auto;
         }
         </style>
 </head>
 <body>
-    <Canvas class="canvas" id="LayerBottom"></Canvas>
-    <Canvas class="canvas" id="LayerTop"></Canvas>
+    <Canvas class="canvas" id="LayerBottom" height="900px" width="1200px"></Canvas>
+    <Canvas class="canvas" id="LayerTop" height="900px" width="1200px"></Canvas>
     <br>
     <button id="button1" onclick="start()">Start</button>
     <script src="script.js"></script>
