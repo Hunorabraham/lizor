@@ -73,19 +73,21 @@ class flower{
         this.pos = pos;
         this.angle = angle;
         this.size = size;
-        this.col = "hsl(58,90%,"+(30+(cb.height-this.pos[1])/10)+"%)";
+        this.col = (30+(cb.height-this.pos[1])/10);
     }
     render(){
         let y = this.pos[1];
         let x = this.pos[0];
         let s = this.size;
         let a = this.angle;
+        let cool = 58-8*3;
         for(let i = 0; i < 8;i++){
-            drawstuffb(x,y,s,s,a,0,this.col);
+            drawstuffb(x,y,s,s,a,0,"hsla("+cool+",90%,"+this.col+"%,0.9)");
             s -= s/6;
             a += (a-Math.PI)/5;
             y += Math.cos(a)*s*1.5;
             x += Math.sin(a)*s*1.5;
+            cool += 3;
         }
     }
 }
@@ -129,7 +131,7 @@ class vineplant{
 class batfly{
     constructor(){
         this.vel = [0,0];
-        this.pos = [300,300];
+        this.pos = [300,c.height/2];
         this.accel = [0,0];
         this.hov = false;
         this.col = 0;
@@ -288,7 +290,7 @@ let south = new vineplant([cb.width/3,cb.height+600],Math.PI-Math.PI/4,false);
 
 
 let bats = [];
-for(let i = 0; i < 0; i++){
+for(let i = 0; i < 200; i++){
     bats[i] = new batfly();
     bats[i].col = Math.random()*180;
 }
