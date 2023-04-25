@@ -11,6 +11,8 @@ let maxvvel = 4;
 let j = 0;
 let wingstr = 3;
 let treshold = 1;
+draw.strokeStyle = "rgba(0,0,0,0)";
+drawb.strokeStyle = "rgba(0,0,0,0)";
 
 //posx,y obviously position, lengx,y obviously ellipse, angle is angle, centeroffset how far the centero f the ellipse is from the posx,y, colour rgb in text
 function drawstuffb(positionx,positiony,lenghtx,lengthy,angle,centeroffset,colour){ 
@@ -58,7 +60,7 @@ class vineplantsegment{
     
 
     render(){
-        drawstuffb(this.pos[0],this.pos[0],2,this.len,this.angle,this.len,"green");
+        drawstuffb(this.pos[0],this.pos[1],2,this.len,this.angle,this.len,"green");
     }
 }
 class vineplant{
@@ -260,7 +262,6 @@ function start(){
 }
 
 function update(){
-    draw.strokeStyle = "rgba(0,0,0,0)";
     draw.clearRect(0,0,c.width,c.height)
     for(let i =0;i<bats.length;i++){
         bats[i].update();
