@@ -1,13 +1,8 @@
 let g = 6;
 let c = document.getElementById("canvas1");
 let draw = c.getContext("2d");
-<<<<<<< HEAD
 let deltaTime = 42;
 let speedup = 1;
-=======
-let deltaTime = 50;
-let speedup = 0.9;
->>>>>>> b8fbcc1a6ac6238b040902deb7d1d3bdd0033650
 let planc = deltaTime/400*speedup;
 let maxvel = 6;
 let maxvvel = 4;
@@ -38,17 +33,19 @@ function drawhalfstuff(positionx,positiony,lenghtx,lengthy,angle,startang,endang
     draw.closePath();
     draw.fillStyle = colour;
     draw.fill();
-<<<<<<< HEAD
 }
 
 class vineplantsegment{
     constructor(pos,angle){
-        this.pos=pos
-        this.len=Math.random()*2
-        this.angle=angle+Math.random()-0.5
+        this.pos=pos;
+        this.len=Math.random()*2;
+        this.angle=angle+Math.random()-0.5;
     }
-=======
->>>>>>> b8fbcc1a6ac6238b040902deb7d1d3bdd0033650
+}
+class vineplant{
+    constructor(){
+        this.segments=[];
+    }
 }
 
 class batfly{
@@ -71,20 +68,14 @@ class batfly{
     flap(rl){
         //if true, right wing flaps
         if(rl){
-<<<<<<< HEAD
             this.vel[0]-=wingstr*(Math.random()+0.5);
-=======
             this.vel[0]-=wingstr;
->>>>>>> b8fbcc1a6ac6238b040902deb7d1d3bdd0033650
             this.vel[1]-=wingstr*1.5;
             this.flapr = true;
         }
         else{
-<<<<<<< HEAD
             this.vel[0]+=wingstr*(Math.random()+0.5);
-=======
             this.vel[0]+=wingstr;
->>>>>>> b8fbcc1a6ac6238b040902deb7d1d3bdd0033650
             this.vel[1]-=wingstr*1.5;
             this.flapl = true;
         }
@@ -214,19 +205,10 @@ class surface{
 
 
 let bats = [];
-<<<<<<< HEAD
 for(let i = 0; i < 200; i++){
     bats[i] = new batfly();
     bats[i].col = Math.random()*180;
 }
-=======
-for(let i = 0; i < 1000; i++){
-    bats[i] = new batfly();
-    bats[i].col = Math.random()*180;
-}
-bats[0].birbheight = 80;
-bats[0].col = 255;
->>>>>>> b8fbcc1a6ac6238b040902deb7d1d3bdd0033650
 
 function start(){
     setInterval(() => {
