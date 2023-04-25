@@ -55,12 +55,13 @@ class vineplantsegment{
         this.pos=pos;
         this.len=10+(Math.random()-0.5)*5;
         this.angle=angle;
+        this.col="hsl("+Math.round(30-(Math.random()-0.5)*40)+",80%,"+Math.round(50-(Math.random()-0.5)*20)+"%)";
     }
     
     
 
     render(){
-        drawstuffb(this.pos[0],this.pos[1],2,this.len,this.angle,this.len,"green");
+        drawstuffb(this.pos[0],this.pos[1],2,this.len,this.angle,this.len,this.col);
     }
 }
 class vineplant{
@@ -78,7 +79,12 @@ class vineplant{
             startsegment = this.segments[this.segments.length-1];
         }
     }
-
+    makevine(){
+        for(let i = 0;i<200;i++){
+            this.addLeaf();
+        }
+        this.render()
+    }
     render(){
         this.segments.forEach(segment => {
             segment.render();
@@ -106,13 +112,13 @@ class batfly{
     flap(rl){
         //if true, right wing flaps
         if(rl){
-            this.vel[0]-=wingstr*(Math.random()+0.5);
+            this.vel[0]-=wingstr+(Math.random()-0.5)*4;
             this.vel[0]-=wingstr;
             this.vel[1]-=wingstr*1.5;
             this.flapr = true;
         }
         else{
-            this.vel[0]+=wingstr*(Math.random()+0.5);
+            this.vel[0]+=wingstr+(Math.random()-0.5)*4;
             this.vel[0]+=wingstr;
             this.vel[1]-=wingstr*1.5;
             this.flapl = true;
@@ -241,12 +247,10 @@ class surface{
     }
 }
 
-let vine = new vineplant([c.width/2,c.height/2],Math.random()*Math.PI*2)
-for(let i = 0;i<200;i++){
-    vine.addLeaf();
-}
-vine.render()
-
+let north = new vineplant([cb.width/2,-200],0);
+let south = new vineplant([cb.width/2,cb.height+200],Math.PI);
+let west = new vineplant([-200,cb.height/2],Math.PI/2);
+let east = new vineplant([cb.width+200,cb.height/2],-Math.PI/2);
 
 let bats = [];
 for(let i = 0; i < 200; i++){
@@ -256,6 +260,10 @@ for(let i = 0; i < 200; i++){
 
 
 function start(){
+    north.makevine();
+    south.makevine();
+    west.makevine();
+    east.makevine();
     setInterval(() => {
         update();
     }, deltaTime);
