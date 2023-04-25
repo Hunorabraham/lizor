@@ -50,7 +50,6 @@ function drawhalfstuff(positionx,positiony,lenghtx,lengthy,angle,startang,endang
     draw.fillStyle = colour;
     draw.fill();
 }
-
 class vineplantsegment{
     constructor(pos,angle,huh){
         this.pos=pos;
@@ -58,7 +57,7 @@ class vineplantsegment{
         this.angle=angle;
         if(huh){this.col="hsl("+(Math.round(30-(Math.random()-0.5)*40)+(cb.height-this.pos[1])/5)+",80%,"+Math.round(50-(Math.random()-0.5)*20)+"%)";}
         else{
-            this.col="hsl("+(Math.round(100-(Math.random()-0.5)*40)+(cb.height-this.pos[1])/4)+",80%,"+Math.round(50-(Math.random()-0.5)*20)+"%)";
+            this.col="hsl("+(Math.round(100-(Math.random()-0.5)*40)+(cb.height-this.pos[1])/4)+",80%,"+(Math.round(30-(Math.random()-0.5)*20)+(cb.height-this.pos[1])/16)+"%)";
         }
     }
     
@@ -68,6 +67,31 @@ class vineplantsegment{
         drawstuffb(this.pos[0],this.pos[1],2,this.len,this.angle,this.len,this.col);
     }
 }
+
+class flower{
+    constructor(pos,angle,size){
+        this.pos = pos;
+        this.angle = angle;
+        this.size = size;
+        this.col = "hsl(58,90%,"+(30+(cb.height-this.pos[1])/10)+"%)";
+    }
+    render(){
+        let y = this.pos[1];
+        let x = this.pos[0];
+        let s = this.size;
+        let a = this.angle;
+        for(let i = 0; i < 8;i++){
+            drawstuffb(x,y,s,s,a,0,this.col);
+            s -= s/6;
+            a += (a-Math.PI)/5;
+            y += Math.cos(a)*s*1.5;
+            x += Math.sin(a)*s*1.5;
+        }
+    }
+}
+
+let flowers = [];
+
 class vineplant{
     constructor(pos,angle,huh){
         this.segments=[];
@@ -84,6 +108,9 @@ class vineplant{
                 startsegment.angle+(0.2+j)*(Math.random()-0.5),this.huh);
             startsegment = this.segments[this.segments.length-1];
             j+=0.1;
+        }
+        if(Math.random()<0.01){
+            flowers[flowers.length] = new flower(startsegment.pos,startsegment.angle+Math.random()-0.5,8+(Math.random()-0.5)*8);
         }
     }
     makevine(){
@@ -243,7 +270,7 @@ class batfly{
         drawstuff(this.pos[0]-this.birbheight*3/10,this.pos[1],this.birbheight*3/20,this.birbheight*3/20,0,0,"rgb(255,255,255)");
     }
 }
-
+//HUNOR TE CSINÁLTAD -hunor
 class surface{
     constructor(location, size, colour){
         this.locx = location[0];
@@ -254,11 +281,14 @@ class surface{
     }
 }
 
+
+
 let north = new vineplant([cb.width/1.5,cb.height+600],Math.PI+Math.PI/4,true);
 let south = new vineplant([cb.width/3,cb.height+600],Math.PI-Math.PI/4,false);
 
+
 let bats = [];
-for(let i = 0; i < 1000; i++){
+for(let i = 0; i < 0; i++){
     bats[i] = new batfly();
     bats[i].col = Math.random()*180;
 }
@@ -267,6 +297,9 @@ for(let i = 0; i < 1000; i++){
 function start(){
     north.makevine();
     south.makevine();
+    for(let i = 0;i<flowers.length;i++){
+        flowers[i].render();
+    }
     setInterval(() => {
         update();
     }, deltaTime);
