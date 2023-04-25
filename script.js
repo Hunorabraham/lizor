@@ -11,6 +11,7 @@ let maxvvel = 4;
 let j = 0;
 let wingstr = 3;
 let treshold = 1;
+let golden = (1+Math.sqrt(5))/2;
 draw.strokeStyle = "rgba(0,0,0,0)";
 drawb.strokeStyle = "rgba(0,0,0,0)";
 
@@ -70,17 +71,17 @@ class vineplant{
         this.segments[0]=new vineplantsegment(pos,angle)
     }
     addLeaf(){
-        let startsegment = this.segments[Math.round(Math.random()*(this.segments.length-1))];
+        let startsegment = this.segments[Math.round(Math.random()*(this.segments.length*3/4-1)+this.segments.length/4)];
         for(let i = 1; i < Math.round(Math.random()*35); i++){
             this.segments[this.segments.length]= new vineplantsegment(
                 [startsegment.pos[0] +6/4*(Math.sin(startsegment.angle)*startsegment.len),
                 startsegment.pos[1]+6/4*(Math.cos(startsegment.angle)*startsegment.len)],
-                startsegment.angle+0.5*(Math.random()-0.5));
+                startsegment.angle+0.75*(Math.random()-0.5));
             startsegment = this.segments[this.segments.length-1];
         }
     }
     makevine(){
-        for(let i = 0;i<200;i++){
+        for(let i = 0;i<2000;i++){
             this.addLeaf();
         }
         this.render()
@@ -247,13 +248,11 @@ class surface{
     }
 }
 
-let north = new vineplant([cb.width/2,-200],0);
-let south = new vineplant([cb.width/2,cb.height+200],Math.PI);
-let west = new vineplant([-200,cb.height/2],Math.PI/2);
-let east = new vineplant([cb.width+200,cb.height/2],-Math.PI/2);
+let north = new vineplant([cb.width/2,cb.height+700],Math.PI);
+
 
 let bats = [];
-for(let i = 0; i < 200; i++){
+for(let i = 0; i < 1000; i++){
     bats[i] = new batfly();
     bats[i].col = Math.random()*180;
 }
@@ -261,9 +260,6 @@ for(let i = 0; i < 200; i++){
 
 function start(){
     north.makevine();
-    south.makevine();
-    west.makevine();
-    east.makevine();
     setInterval(() => {
         update();
     }, deltaTime);
@@ -277,3 +273,4 @@ function update(){
 
     }
 }
+start();
