@@ -52,11 +52,14 @@ function drawhalfstuff(positionx,positiony,lenghtx,lengthy,angle,startang,endang
 }
 
 class vineplantsegment{
-    constructor(pos,angle){
+    constructor(pos,angle,huh,j){
         this.pos=pos;
         this.len=10+(Math.random()-0.5)*5;
         this.angle=angle;
-        this.col="hsl("+Math.round(30-(Math.random()-0.5)*40)+",80%,"+Math.round(50-(Math.random()-0.5)*20)+"%)";
+        if(huh){this.col="hsl("+(Math.round(30-(Math.random()-0.5)*40)+j)+",80%,"+Math.round(50-(Math.random()-0.5)*20)+"%)";}
+        else{
+            this.col="hsl("+(Math.round(80-(Math.random()-0.5)*40)+j)+",80%,"+Math.round(50-(Math.random()-0.5)*20)+"%)";
+        }
     }
     
     
@@ -66,18 +69,21 @@ class vineplantsegment{
     }
 }
 class vineplant{
-    constructor(pos,angle){
+    constructor(pos,angle,huh){
         this.segments=[];
-        this.segments[0]=new vineplantsegment(pos,angle)
+        this.segments[0]=new vineplantsegment(pos,angle,huh);
+        this.huh = huh;
     }
     addLeaf(){
         let startsegment = this.segments[Math.round(Math.random()*(this.segments.length*3/4-1)+this.segments.length/4)];
+        let j = 0;
         for(let i = 1; i < Math.round(Math.random()*35); i++){
             this.segments[this.segments.length]= new vineplantsegment(
                 [startsegment.pos[0] +6/4*(Math.sin(startsegment.angle)*startsegment.len),
                 startsegment.pos[1]+6/4*(Math.cos(startsegment.angle)*startsegment.len)],
-                startsegment.angle+0.75*(Math.random()-0.5));
+                startsegment.angle+0.75*(Math.random()-0.5),this.huh,j);
             startsegment = this.segments[this.segments.length-1];
+            j+=7;
         }
     }
     makevine(){
@@ -248,8 +254,8 @@ class surface{
     }
 }
 
-let north = new vineplant([cb.width/2,cb.height+700],Math.PI);
-
+let north = new vineplant([cb.width/2,cb.height+700],Math.PI,true);
+let south = new vineplant([cb.width/2,cb.height+700],Math.PI,false);
 
 let bats = [];
 for(let i = 0; i < 1000; i++){
@@ -260,6 +266,7 @@ for(let i = 0; i < 1000; i++){
 
 function start(){
     north.makevine();
+    south.makevine();
     setInterval(() => {
         update();
     }, deltaTime);
