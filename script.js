@@ -52,13 +52,13 @@ function drawhalfstuff(positionx,positiony,lenghtx,lengthy,angle,startang,endang
 }
 
 class vineplantsegment{
-    constructor(pos,angle,huh,j){
+    constructor(pos,angle,huh){
         this.pos=pos;
         this.len=10+(Math.random()-0.5)*5;
         this.angle=angle;
-        if(huh){this.col="hsl("+(Math.round(30-(Math.random()-0.5)*40)+j)+",80%,"+Math.round(50-(Math.random()-0.5)*20)+"%)";}
+        if(huh){this.col="hsl("+(Math.round(30-(Math.random()-0.5)*40)+(cb.height-this.pos[1])/5)+",80%,"+Math.round(50-(Math.random()-0.5)*20)+"%)";}
         else{
-            this.col="hsl("+(Math.round(80-(Math.random()-0.5)*40)+j)+",80%,"+Math.round(50-(Math.random()-0.5)*20)+"%)";
+            this.col="hsl("+(Math.round(100-(Math.random()-0.5)*40)+(cb.height-this.pos[1])/4)+",80%,"+Math.round(50-(Math.random()-0.5)*20)+"%)";
         }
     }
     
@@ -81,9 +81,9 @@ class vineplant{
             this.segments[this.segments.length]= new vineplantsegment(
                 [startsegment.pos[0] +6/4*(Math.sin(startsegment.angle)*startsegment.len),
                 startsegment.pos[1]+6/4*(Math.cos(startsegment.angle)*startsegment.len)],
-                startsegment.angle+0.75*(Math.random()-0.5),this.huh,j);
+                startsegment.angle+(0.2+j)*(Math.random()-0.5),this.huh);
             startsegment = this.segments[this.segments.length-1];
-            j+=7;
+            j+=0.1;
         }
     }
     makevine(){
@@ -254,8 +254,8 @@ class surface{
     }
 }
 
-let north = new vineplant([cb.width/2,cb.height+700],Math.PI,true);
-let south = new vineplant([cb.width/2,cb.height+700],Math.PI,false);
+let north = new vineplant([cb.width/1.5,cb.height+600],Math.PI+Math.PI/4,true);
+let south = new vineplant([cb.width/3,cb.height+600],Math.PI-Math.PI/4,false);
 
 let bats = [];
 for(let i = 0; i < 1000; i++){
