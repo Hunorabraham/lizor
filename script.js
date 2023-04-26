@@ -169,6 +169,7 @@ class batfly{
         this.wingrr = Math.PI*3/4;
         this.wingspdl = 0;
         this.wingspdr = 0;
+        this.brain= new batflybrain(this.size,this.pos)
     }
 
     flap(rl,str){
