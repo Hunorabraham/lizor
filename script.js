@@ -6,7 +6,7 @@ let drawb = cb.getContext("2d");
 let deltaTime = 42;
 let speedup = 1;
 let planc = deltaTime/400*speedup;
-let maxvel = 6;
+let maxvel = 10;
 let maxvvel = 4;
 let j = 0;
 let wingstr = 3;
@@ -67,7 +67,7 @@ class batflybrain{
         this.fthreshold=100+100*(Math.random()-0.5);
 
         //Extras:
-        this.Memory= new Array(Math.round(3+(Math.random-0.5)*2));
+        this.Memory= [,,];
         this.Lmem=[];
         this.Smem=pos;
         this.Nmem=[];
@@ -317,7 +317,7 @@ let south = new vineplant([cb.width/3,cb.height+600],Math.PI-Math.PI/4,false);
 
 
 let bats = [];
-for(let i = 0; i < 600; i++){
+for(let i = 0; i < 1; i++){
     bats[i] = new batfly();
     bats[i].col = Math.random()*180;
 }
