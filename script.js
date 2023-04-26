@@ -50,6 +50,32 @@ function drawhalfstuff(positionx,positiony,lenghtx,lengthy,angle,startang,endang
     draw.fillStyle = colour;
     draw.fill();
 }
+
+class batflybrain{
+    constructor(size,pos){
+        //Senses:
+        this.sight=size*25;
+        
+        //Desires:
+        //Energy:
+        this.energy=1000;
+        this.epriority=1+Math.random()-0.5;
+        this.ethreshold=1000/3*this.epriority;
+        //Fear:
+        this.fear=0;
+        this.fpriority=this.sight;
+        this.fthreshold=100+100*(Math.random()-0.5);
+
+        //Extras:
+        this.Memory= new Array(Math.round(3+(Math.random-0.5)*2));
+        this.Lmem=[];
+        this.Smem=pos;
+        this.Nmem=[];
+
+        //Brain states:
+    }
+}
+
 class vineplantsegment{
     constructor(pos,angle,huh){
         this.pos=pos;
