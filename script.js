@@ -176,13 +176,11 @@ class batfly{
         //if true, right wing flaps
         if(rl){
             this.vel[0]-=str+(Math.random()-0.5)*4;
-            this.vel[0]-=str;
             this.vel[1]-=str*1.5;
             this.flapr = true;
         }
         else{
             this.vel[0]+=str+(Math.random()-0.5)*4;
-            this.vel[0]+=str;
             this.vel[1]-=str*1.5;
             this.flapl = true;
         }
