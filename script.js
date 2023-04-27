@@ -71,6 +71,8 @@ class batflybrain{
         this.Lmem=[];
         this.Smem=pos;
         this.Nmem=[];
+        this.Tmem=[];
+        this.state="any";
 
         //Brain states:
     }
@@ -90,13 +92,7 @@ class batflybrain{
                 this.Memory[2]=flowerpos;
             }
         });
-        //random flaps
-        if(Math.random()>1-treshold*planc && !this.flapr){
-            this.flap(true,wingstr);
-        }
-        if(Math.random()<treshold*planc && !this.flapl){
-            this.flap(false,wingstr);
-        }    
+   
     }
 }
 
@@ -202,11 +198,13 @@ class batfly{
             this.vel[0]-=str+(Math.random()-0.5)*4;
             this.vel[1]-=str*1.5;
             this.flapr = true;
+            this.brain.energy-=this.birbheight*2;
         }
         else{
             this.vel[0]+=str+(Math.random()-0.5)*4;
             this.vel[1]-=str*1.5;
             this.flapl = true;
+            this.brain.energy-=this.birbheight*2;
         }
     }
 
@@ -214,6 +212,21 @@ class batfly{
         //brain update
         this.brain.update()
 
+        if(this.brain.state=="to"){
+
+        }
+        else if (this.brain.state=="from"){
+
+        }
+        else{
+        //random flaps
+        if(Math.random()>1-treshold*planc && !this.flapr){
+            this.flap(true,wingstr);
+        }
+        if(Math.random()<treshold*planc && !this.flapl){
+            this.flap(false,wingstr);
+        }
+        }
         //random jittering
         this.accel = [(Math.random()-0.5)/4,(Math.random()-0.5)/4];
 
@@ -289,6 +302,17 @@ class batfly{
         }
     }
 
+    stateswitch(){
+        if(this.energy<this.ethreshold*this.epriority){
+            this.state="to"
+            while(typeof(this.state)!=Array){
+                this.state=this.Memory[Math.random()*this.Memory.length]
+            }
+        }
+        else{
+            this.state="any"
+        }
+    }
 
     render(){
         let yoff = Math.cos(this.rotation)*this.birbheight*3/4;
