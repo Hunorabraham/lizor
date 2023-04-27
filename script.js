@@ -132,6 +132,19 @@ class vineplantsegment{
     }
 }
 
+
+class lizard{
+    
+}
+
+
+
+
+
+
+
+
+
 class flower{
     constructor(pos,angle,size){
         this.pos = pos;
@@ -237,8 +250,8 @@ class batfly{
             this.tovector[1] = this.brain.Tmem[1]-this.pos[1];
             try{
                 if(this.tovector[1]<0){
-                    this.tresholds[0] = treshold*3.5;
-                    this.tresholds[1] = treshold*3.5;
+                    this.tresholds[0] = treshold*4;
+                    this.tresholds[1] = treshold*4;
                 }
                 else{
                     this.tresholds[0] = treshold/2;
