@@ -301,8 +301,9 @@ class batfly{
         this.rotation = 0;
         this.flapl = false;
         this.flapr = false;
-        this.wingrl = -Math.PI*3/4;
-        this.wingrr = Math.PI*3/4;
+        this.wingang = Math.PI*3/4+(Math.random()-0.5)*Math.PI/14;
+        this.wingrl = -this.wingang;
+        this.wingrr = this.wingang;
         this.wingspdl = 0;
         this.wingspdr = 0;
         this.brain= new batflybrain(this.birbheight,this.pos);
@@ -373,35 +374,35 @@ class batfly{
         this.accel = [(Math.random()-0.5)/4,(Math.random()-0.5)/4];
 
         //rightwing
-        if(this.flapr && this.wingrr>=Math.PI*3/4){
+        if(this.flapr && this.wingrr>=this.wingang){
             if(this.wingspdr == 1){
                 this.flapr = false;
                 this.wingspdr = 0;
-                this.wingrr = Math.PI*3/4;
+                this.wingrr = this.wingang;
             }
             else{
                 this.wingspdr = -1;
             }
         }
-        if(this.flapr && this.wingrr<=Math.PI*3/4-Math.PI/2){
+        if(this.flapr && this.wingrr<=this.wingang-Math.PI/2){
             this.wingspdr = 1;
-            this.wingrr = Math.PI*3/4-Math.PI/2+0.1;
+            this.wingrr = this.wingang-Math.PI/2+0.1;
         }
 
         //leftwing
-        if(this.flapl && this.wingrl<=-Math.PI*3/4){
+        if(this.flapl && this.wingrl<=-this.wingang){
             if(this.wingspdl == -1){
                 this.flapl = false;
                 this.wingspdl = 0;
-                this.wingrl = -Math.PI*3/4;
+                this.wingrl = -this.wingang;
             }
             else{
                 this.wingspdl = 1;
             }
         }
-        if(this.flapl && this.wingrl>=-Math.PI*3/4+Math.PI/2){
+        if(this.flapl && this.wingrl>=-this.wingang+Math.PI/2){
             this.wingspdl = -1;
-            this.wingrl = -Math.PI*3/4+Math.PI/2-0.1;
+            this.wingrl = -this.wingang+Math.PI/2-0.1;
         }
 
         this.wingrr += this.wingspdr*planc*8;
@@ -424,7 +425,7 @@ class batfly{
         this.pos[1] += this.vel[1]*planc*10;
 
         //rotation accorind to velocity
-        this.rotation = this.vel[0]*Math.PI/-16;
+        this.rotation = this.vel[0]/-maxvel*Math.PI/2;
 
         //gravity
         this.vel[1] += g*planc;
