@@ -155,7 +155,7 @@ class vineplant{
             j+=0.1;
         }
         if(Math.random()<0.01){
-            flowers[flowers.length] = new flower(startsegment.pos,startsegment.angle+Math.random()-0.5,8+(Math.random()-0.5)*8);
+            flowers[flowers.length] = new flower(startsegment.pos,startsegment.angle+Math.random()-0.5,3.5+(Math.random()-0.5*3+startsegment.pos[1]/200));
         }
     }
     makevine(){
@@ -178,7 +178,7 @@ class batfly{
         this.accel = [0,0];
         this.hov = false;
         this.col = 0;
-        this.birbheight = 5+(Math.random()-0.5)*6;
+        this.birbheight = 5+(Math.random()-0.5)*2;
         this.rotation = 0;
         this.flapl = false;
         this.flapr = false;
