@@ -76,6 +76,19 @@ class batflybrain{
 
         //Brain states:
     }
+
+    stateswitch(){
+        if(this.energy<this.ethreshold*this.epriority){
+            this.state="to"
+            while(typeof(this.state)!=Array){
+                this.state=this.Memory[Math.random()*this.Memory.length]
+            }
+        }
+        else{
+            this.state="any"
+        }
+    }
+
     bounder(){
         let boundingbox = [];
         flowers.forEach(flower => {
@@ -92,7 +105,7 @@ class batflybrain{
                 this.Memory[2]=flowerpos;
             }
         });
-   
+        this.stateswitch();
     }
 }
 
@@ -302,17 +315,7 @@ class batfly{
         }
     }
 
-    stateswitch(){
-        if(this.energy<this.ethreshold*this.epriority){
-            this.state="to"
-            while(typeof(this.state)!=Array){
-                this.state=this.Memory[Math.random()*this.Memory.length]
-            }
-        }
-        else{
-            this.state="any"
-        }
-    }
+
 
     render(){
         let yoff = Math.cos(this.rotation)*this.birbheight*3/4;
