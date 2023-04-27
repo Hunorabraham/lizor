@@ -89,7 +89,14 @@ class batflybrain{
                 this.Memory.shift();
                 this.Memory[2]=flowerpos;
             }
-        });    
+        });
+        //random flaps
+        if(Math.random()>1-treshold*planc && !this.flapr){
+            this.flap(true,wingstr);
+        }
+        if(Math.random()<treshold*planc && !this.flapl){
+            this.flap(false,wingstr);
+        }    
     }
 }
 
@@ -209,15 +216,6 @@ class batfly{
 
         //random jittering
         this.accel = [(Math.random()-0.5)/4,(Math.random()-0.5)/4];
-        
-
-        //random flaps
-        if(Math.random()>1-treshold*planc && !this.flapr){
-            this.flap(true,wingstr);
-        }
-        if(Math.random()<treshold*planc && !this.flapl){
-            this.flap(false,wingstr);
-        }
 
         //rightwing
         if(this.flapr && this.wingrr>=Math.PI*3/4){
