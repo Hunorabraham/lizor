@@ -254,7 +254,15 @@ class vineplant{
     }
 }
 
-
+class lizardsegment{
+    constructor(points,weight,role,style){
+        this.points=points;
+        this.weight=weight;
+        this.style=style;
+        this.role=role;
+        this.struts=[];
+    }
+}
 
 class lizard{
     constructor(){
