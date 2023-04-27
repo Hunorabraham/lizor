@@ -71,7 +71,7 @@ class batflybrain{
         this.Lmem=[];
         this.Smem=pos;
         this.Nmem=[];
-        this.Tmem=[];
+        this.Tmem=undefined;
         this.state="any";
 
         //Brain states:
@@ -79,13 +79,18 @@ class batflybrain{
 
     stateswitch(){
         if(this.energy<this.ethreshold*this.epriority){
-            this.state="to"
-            while(typeof(this.state)!=Array){
-                this.state=this.Memory[Math.random()*this.Memory.length]
+            
+            this.state="to";
+            while(this.Tmem==undefined){
+                this.Tmem = this.Memory[Math.round(Math.random()*this.Memory.length)];
+                if(this.Memory[2]==undefined){
+                    this.state = "any";
+                    break;
+                }
             }
         }
         else{
-            this.state="any"
+            this.state="any";
         }
     }
 
@@ -202,7 +207,9 @@ class batfly{
         this.wingrr = Math.PI*3/4;
         this.wingspdl = 0;
         this.wingspdr = 0;
-        this.brain= new batflybrain(this.birbheight,this.pos)
+        this.brain= new batflybrain(this.birbheight,this.pos);
+        this.tovector = [];
+        this.tresholds = [treshold,treshold];
     }
 
     flap(rl,str){
@@ -226,19 +233,43 @@ class batfly{
         this.brain.update()
 
         if(this.brain.state=="to"){
+            this.tovector[0] = this.brain.Tmem[0]-this.pos[0];
+            this.tovector[1] = this.brain.Tmem[1]-this.pos[1];
+            try{
+                if(this.tovector[1]<0){
+                    this.tresholds[0] = treshold*3.5;
+                    this.tresholds[1] = treshold*3.5;
+                }
+                else{
+                    this.tresholds[0] = treshold/2;
+                    this.tresholds[1] = treshold/2;
+                }
+                if(this.tovector[0]>0){
+                    this.tresholds[0] = 0;
+                }
+                else{
+                    this.tresholds[1] = 0;
+                }
+            }catch{}
 
+            if(Math.random()<this.tresholds[0]*planc && !this.flapr){
+                this.flap(true,wingstr);
+                }
+                if(Math.random()<this.tresholds[1]*planc && !this.flapl){
+                this.flap(false,wingstr);
+                }
         }
         else if (this.brain.state=="from"){
 
         }
         else{
         //random flaps
-        if(Math.random()>1-treshold*planc && !this.flapr){
+            if(Math.random()>1-treshold*planc && !this.flapr){
             this.flap(true,wingstr);
-        }
-        if(Math.random()<treshold*planc && !this.flapl){
+            }
+            if(Math.random()<treshold*planc && !this.flapl){
             this.flap(false,wingstr);
-        }
+            }
         }
         //random jittering
         this.accel = [(Math.random()-0.5)/4,(Math.random()-0.5)/4];
