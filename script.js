@@ -391,7 +391,7 @@ let south = new vineplant([cb.width/3,cb.height+600],Math.PI-Math.PI/4,false);
 
 
 let bats = [];
-for(let i = 0; i < 40; i++){
+for(let i = 0; i < 100; i++){
     bats[i] = new batfly();
     bats[i].col = Math.random()*180;
 }
@@ -400,14 +400,16 @@ for(let i = 0; i < 40; i++){
 function start(){
     north.makevine();
     south.makevine();
+    let tempflow = [];
+    flowers.forEach(flower => {
+        if(!(flower.pos[1]>cb.height-50 || flower.pos[0]<0 || flower.pos[0]>cb.width)){
+            tempflow.push(flower);
+        }
+    });
+    flowers = tempflow;
     for(let i = 0;i<flowers.length;i++){
         flowers[i].render();
     }
-    flowers.forEach(flower => {
-        if(flower.pos[1]>cb.height || flower.pos[0]<0 || flower.pos[0]>cb.width){
-            flowers.splice(flowers.indexOf(flower),1)
-        }
-    });
     setInterval(() => {
         update();
     }, deltaTime);
