@@ -15,6 +15,67 @@ let golden = (1+Math.sqrt(5))/2;
 draw.strokeStyle = "rgba(0,0,0,0)";
 drawb.strokeStyle = "rgba(0,0,0,0)";
 
+class physics{
+    constructor(){
+    }
+    applyForce(obj,force){
+        obj.forces[0] += force[0];
+        obj.forces[1] += force[1];
+    }
+    calcaccel(obj){
+        obj.accel[0] = obj.forces[0]/obj.weight;
+        obj.accel[1] = obj.forces[1]/obj.weight;
+    }
+}
+let phys = new physics();
+
+class point{
+    constructor(pos,weight){
+        this.pos = pos;
+        this.weight = weight;
+        this.vel = [];
+        this.accel = [];
+        this.forces = [];
+    }
+    update(){
+        this.vel[0] += this.accel[0];
+        this.vel[1] += this.accel[1];
+        this.pos[0] += this.vel[0];
+        this.pos[1] += this.vel[1];
+        this.forces = [];
+    }
+}
+let points = [];
+class strut{
+    constructor(endpoints,defaultlength,elasticconstant){
+        this.ends = endpoints;
+        this.dlen = defaultlength;
+        this.econst = elasticconstant;
+    }
+    update(){
+        //get the two points the strut is connected to from the array
+        let point1 = points[this.ends[0]];
+        let point2 = points[this.ends[1]];
+        //calculate the vector between the two points
+        let diff = [point2.pos[0]-point1.pos[0],point2.pos[1]-point1.pos[1]];
+        //absolute value of the diff vector
+        let diffabs = Math.sqrt(diff[0]*diff[0]+diff[1]*diff[1]);
+        //calculate the unitvector pointing in the same direction as the diff vector
+        let diffunit = [diff[0]/diffabs,diff[1]/diffabs];
+        //calculate the deviation from the default lenght
+        let forceabs = this.elasticConstant*(this.lenght-diffabs);
+        //calculate the force for the point2, this is in the direction of diff if the current lenght is smaller than the default length, otherwise it's in the other direction. The strenght is given by the forceabs.
+        let force2 = [diffunit[0]*forceabs,diffunit[1]*forceabs]
+        //the fornce needed for point one is the pair of force2, exact opposite, same strength, so only a multipication by -1 is needed
+        let force1 = [force2[0]*-1,force2[1]*-1];
+        //apply the two forces to the corresponding points
+        phys.applyforce(points[this.ends[0]],force1);
+        phys.applyforce(points[this.ends[1]],force2);
+    }
+}
+
+
+
 //posx,y obviously position, lengx,y obviously ellipse, angle is angle, centeroffset how far the centero f the ellipse is from the posx,y, colour rgb in text
 function drawstuffb(positionx,positiony,lenghtx,lengthy,angle,centeroffset,colour){ 
     let yoff = Math.cos(angle)*centeroffset;
@@ -133,18 +194,6 @@ class vineplantsegment{
 }
 
 
-class lizard{
-    
-}
-
-
-
-
-
-
-
-
-
 class flower{
     constructor(pos,angle,size){
         this.pos = pos;
@@ -202,6 +251,14 @@ class vineplant{
         this.segments.forEach(segment => {
             segment.render();
         });
+    }
+}
+
+
+
+class lizard{
+    constructor(){
+
     }
 }
 
