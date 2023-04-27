@@ -268,15 +268,25 @@ class lizardsegment{
     constructor(points,weight,role,style){
         this.points=points;
         this.weight=weight;
-        this.style=style;
-        this.role=role;
+        this.styles=style;//how it functions
+        this.role=role;//coloring
         this.struts=[];
+    }
+    render(col){
+        drawtriange(this.points[0],this.points[1],this.points[2],col);
+        drawtriange(this.points[0],this.points[2],this.points[3],col);
     }
 }
 
 class lizard{
     constructor(){
         this.segments = [];
+        this.col;
+    }
+    update(){
+        this.segments.forEach(segment => {
+            segment.render();
+        });
     }
 }
 
