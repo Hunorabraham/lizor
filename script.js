@@ -88,7 +88,6 @@ class batflybrain{
             if((flowerpos[0]-this.Smem[0])**2+(flowerpos[1]-this.Smem[1])**2<=this.sight**2 && !this.Memory.includes(flowerpos)){
                 this.Memory.shift();
                 this.Memory[2]=flowerpos;
-                console.log("genny")
             }
         });    
     }
