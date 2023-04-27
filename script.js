@@ -67,12 +67,30 @@ class batflybrain{
         this.fthreshold=100+100*(Math.random()-0.5);
 
         //Extras:
-        this.Memory= [,,];
+        this.Memory= [undefined,undefined,undefined];
         this.Lmem=[];
         this.Smem=pos;
         this.Nmem=[];
 
         //Brain states:
+    }
+    bounder(){
+        let boundingbox = [];
+        flowers.forEach(flower => {
+            if(this.Smem[0]-this.sight<flower.pos[0]<this.Smem[0]+this.sight && this.Smem[1]-this.sight<flower.pos[1]<this.Smem[1]+this.sight){
+                boundingbox.push(flower.pos);
+            }
+        })
+        return boundingbox;
+    }
+    update(){
+        this.bounder().forEach(flowerpos => {
+            if((flowerpos[0]-this.Smem[0])**2+(flowerpos[1]-this.Smem[1])**2<=this.sight**2 && !this.Memory.includes(flowerpos)){
+                this.Memory.shift();
+                this.Memory[2]=flowerpos;
+                console.log("genny")
+            }
+        });    
     }
 }
 
@@ -169,7 +187,7 @@ class batfly{
         this.wingrr = Math.PI*3/4;
         this.wingspdl = 0;
         this.wingspdr = 0;
-        this.brain= new batflybrain(this.size,this.pos)
+        this.brain= new batflybrain(this.birbheight,this.pos)
     }
 
     flap(rl,str){
@@ -187,6 +205,9 @@ class batfly{
     }
 
     update(){
+        //brain update
+        this.brain.update()
+
         //random jittering
         this.accel = [(Math.random()-0.5)/4,(Math.random()-0.5)/4];
         
@@ -315,7 +336,7 @@ let south = new vineplant([cb.width/3,cb.height+600],Math.PI-Math.PI/4,false);
 
 
 let bats = [];
-for(let i = 0; i < 1; i++){
+for(let i = 0; i < 40; i++){
     bats[i] = new batfly();
     bats[i].col = Math.random()*180;
 }
@@ -327,6 +348,11 @@ function start(){
     for(let i = 0;i<flowers.length;i++){
         flowers[i].render();
     }
+    flowers.forEach(flower => {
+        if(flower.pos[1]>cb.height || flower.pos[0]<0 || flower.pos[0]>cb.width){
+            flowers.splice(flowers.indexOf(flower),1)
+        }
+    });
     setInterval(() => {
         update();
     }, deltaTime);
@@ -337,7 +363,6 @@ function update(){
     for(let i =0;i<bats.length;i++){
         bats[i].update();
         bats[i].render();
-
     }
 }
 start();
