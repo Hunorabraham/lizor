@@ -63,9 +63,9 @@ class strut{
         //calculate the unitvector pointing in the same direction as the diff vector
         let diffunit = [diff[0]/diffabs,diff[1]/diffabs];
         //calculate the deviation from the default lenght
-        let forceabs = this.elasticConstant*(this.lenght-diffabs);
+        let forceabs = this.econst*(this.dlen-diffabs);
         //calculate the force for the point2, this is in the direction of diff if the current lenght is smaller than the default length, otherwise it's in the other direction. The strenght is given by the forceabs.
-        let force2 = [diffunit[0]*forceabs,diffunit[1]*forceabs]
+        let force2 = [diffunit[0]*forceabs,diffunit[1]*forceabs];
         //the fornce needed for point one is the pair of force2, exact opposite, same strength, so only a multipication by -1 is needed
         let force1 = [force2[0]*-1,force2[1]*-1];
         //apply the two forces to the corresponding points
@@ -73,7 +73,7 @@ class strut{
         phys.applyforce(points[this.ends[1]],force2);
     }
 }
-
+let struts = [];
 
 
 //posx,y obviously position, lengx,y obviously ellipse, angle is angle, centeroffset how far the centero f the ellipse is from the posx,y, colour rgb in text
@@ -109,6 +109,16 @@ function drawhalfstuff(positionx,positiony,lenghtx,lengthy,angle,startang,endang
     draw.stroke();
     draw.closePath();
     draw.fillStyle = colour;
+    draw.fill();
+}
+
+function drawtriange(point1,point2,point3,color){
+    draw.beginPath();
+    draw.moveTo(point1[0],point1[1]);
+    draw.lineTo(point2[0],point2[1]);
+    draw.lineTo(point3[0],point3[1]);
+    draw.closePath();
+    draw.fillStyle = color;
     draw.fill();
 }
 
@@ -258,7 +268,7 @@ class vineplant{
 
 class lizard{
     constructor(){
-
+        this.segments = [];
     }
 }
 
@@ -486,7 +496,7 @@ function start(){
 }
 
 function update(){
-    draw.clearRect(0,0,c.width,c.height)
+    draw.clearRect(0,0,c.width,c.height);
     for(let i =0;i<bats.length;i++){
         bats[i].update();
         bats[i].render();
