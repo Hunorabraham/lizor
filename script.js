@@ -149,7 +149,7 @@ class batflybrain{
     }
 
     stateswitch(){
-        if(this.energy<this.ethreshold*this.epriority){
+        if(this.energy<this.ethreshold*this.epriority && this.state!="nuked"){
             
             this.state="to";
             while(this.Tmem==undefined){
@@ -160,7 +160,7 @@ class batflybrain{
                 }
             }
         }
-        else{
+        else if(this.state!="nuked"){
             this.state="any";
         }
     }
@@ -495,6 +495,11 @@ for(let i = 0; i < 100; i++){
     bats[i].col = Math.random()*180;
 }
 
+function nuke(){
+    bats.forEach(bat => {
+        bat.brain.state="nuked";
+    });
+}
 
 function start(){
     north.makevine();
@@ -517,7 +522,12 @@ function start(){
 function update(){
     draw.clearRect(0,0,c.width,c.height);
     for(let i =0;i<bats.length;i++){
+        if(bats[i].brain.state!="nuked"){
         bats[i].update();
+        }
+        else{
+            drawstuff(cb.width/2,cb.height/2,200,200,0,0,"white");
+        }
         bats[i].render();
     }
 }
